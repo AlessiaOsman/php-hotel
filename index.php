@@ -2,27 +2,34 @@
 include 'includes/data/data.php';
 
 $service = $_GET['service'] ?? '';
+$vote = $_GET['vote'] ?? '';
+
+$voteNumber = intval($vote);
 
 $new_hotels = [];
-
 
 
 if (!empty($service)) {
     foreach ($hotels as $hotel) {
         if ($hotel['parking'] === true && $service === 'parking') {
             array_push($new_hotels, $hotel);
+        } 
+    }
+} elseif (!empty($voteNumber)) {
+    foreach ($hotels as $hotel){
+        if ($voteNumber === $hotel['vote']){
+            array_push($new_hotels, $hotel);
+        }
+    }
+} elseif (!empty($service) && !empty($voteNumber)){
+    foreach ($hotels as $hotel){
+        if($hotel['parking'] === true && $voteNumber === $hotel['vote']){
+            array_push($new_hotels, $hotel);
         }
     }
 } else {
     $new_hotels = $hotels;
-};
-
-
-
-
-
-
-
+}
 
 ?>
 
@@ -39,13 +46,16 @@ if (!empty($service)) {
 
 <body>
     <header>
-        <form class="row g-3 container">
+        <form class="row g-3 container mt-5">
             <div class="col-md-4">
                 <select id="service" class="form-select" name="service">
                     <option value="">Choose...</option>
                     <option <?php if ($service === 'parking') : ?> selected <?php endif ?> value="parking">Parcheggio</option>
                     <option <?php if ($service === 'breakfast') : ?> selected <?php endif ?> value="breakfast">Colazione</option>
                 </select>
+            </div>
+            <div class="col-md-6">
+                <input type="number" class="form-control" name="vote">
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Cerca</button>
