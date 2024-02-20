@@ -9,7 +9,13 @@ $voteNumber = intval($vote);
 $new_hotels = [];
 
 
-if (!empty($service)) {
+if (!empty($service) && !empty($voteNumber)){
+    foreach ($hotels as $hotel){
+        if($hotel['parking'] === true && $service === 'parking' && $voteNumber === $hotel['vote']){
+            array_push($new_hotels, $hotel);
+        }
+    }
+} elseif (!empty($service)) {
     foreach ($hotels as $hotel) {
         if ($hotel['parking'] === true && $service === 'parking') {
             array_push($new_hotels, $hotel);
@@ -18,12 +24,6 @@ if (!empty($service)) {
 } elseif (!empty($voteNumber)) {
     foreach ($hotels as $hotel){
         if ($voteNumber === $hotel['vote']){
-            array_push($new_hotels, $hotel);
-        }
-    }
-} elseif (!empty($service) && !empty($voteNumber)){
-    foreach ($hotels as $hotel){
-        if($hotel['parking'] === true && $voteNumber === $hotel['vote']){
             array_push($new_hotels, $hotel);
         }
     }
